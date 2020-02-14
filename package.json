@@ -1,0 +1,42 @@
+{
+  "name": "@teatro13/ttr",
+  "version": "1.0.0",
+  "description": "Command-Line Interface for Teatro",
+  "author": "Faddy Michel Samaan <faddy@teatro13.com>",
+  "bin": {
+    "ttr": "cli/index.js"
+  },
+  "keywords": [
+    "ws",
+    "WebSocket",
+    "WebSockets",
+    "play",
+    "plays",
+    "ticket",
+    "tickets",
+    "ticketing",
+    "access",
+    "authorization",
+    "authentication",
+    "real-time",
+    "live",
+    "cli",
+    "linux",
+    "unix",
+    "shell",
+    "bash",
+    "experimental"
+  ],
+  "homepage": "https://github.com/teatro13/ttr",
+  "repository": "github:teatro13/ttr",
+  "bugs": "https://github.com/teatro13/ttr/issues",
+  "license": "MIT",
+  "main": "cli/index.js",
+  "files": [
+    "cli/*.js"
+  ],
+  "dependencies": {
+    "@teatro13/teatro": "^1.0.5",
+    "yargs": "^15.1.0"
+  }
+}
