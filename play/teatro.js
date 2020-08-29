@@ -2,8 +2,9 @@
 
 'use strict';
 
-const argv = require ( './argv.js' );
-const Teatro = require ( '@teatro13/teatro' );
+import { argv } from './argv.js';
+import Teatro from '@teatro13/teatro';
+import { Opening } from './opening.js';
 
 const options = {};
 options .ws = {
@@ -19,19 +20,29 @@ const teatro = new Teatro ();
 
 teatro .on ( 'error', ( error ) => {
 
+process .exitCode = -1;
+
 console .error ( '#error', '#teatro', '#code', error .code, '#message', error .message );
 
 } );
 
-teatro .on ( 'participant', require ( './participant' ) );
+ teatro .on ( 'open', Opening ( key ) );
+/*
+teatro .on ( 'close', () => {
 
- teatro .on ( 'open', require ( './open' ) ( key ) );
+console .log ( '#teatro #close' );
+process .stdin .removeAllListeners ();
+process .stdin .end ();
 
+} );
+*/
 process .on ( 'SIGINT', () => {
 
-console .error ( '#SIGINT' );
+process .exitCode = 1;
 
 teatro .close ( key );
+
+console .error ( '#SIGINT' );
 
 } );
 
@@ -51,7 +62,15 @@ teatro .close ( key );
 
 process .stdout .on ( 'error', ( error ) => {
 
+process .exitCode = -1;
+
 console .error ( '#error', '#stdout', '#code', error .code, '#message', error .message );
+
+teatro .close ( key );
+
+} );
+
+process .stdin .on ( 'end', () => {
 
 teatro .close ( key );
 

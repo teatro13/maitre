@@ -1,4 +1,6 @@
-module .exports = require ( 'yargs' )
+import yargs from 'yargs';
+
+export const argv = yargs
 .option ( 'host', {
 
 alias: 'H',
