@@ -19,4 +19,12 @@ default: 1313,
 type: 'number'
 
 } )
+.option ( 'paths', {
+
+alias: 'C',
+group: 'Opening',
+description: 'Paths to be imported as cast for Teatro opening scenario.',
+type: 'array'
+
+} )
 .argv;

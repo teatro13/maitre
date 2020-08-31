@@ -1,7 +1,7 @@
 const play = {};
 export default play;
 
-const character = play .character = {};
+export const character = play .character = {};
 character .events = [ 'venue' ];
 character .action = function action ( script, cue, blooper ) {
 
@@ -27,8 +27,7 @@ new TypeError ( "Play is not of type 'function'" )
 
 production [ argument ] = Play;
 
-
-return cue ();
+cue ( '#maitre #venue' );
 
 } )
 .catch ( ( error ) => {
