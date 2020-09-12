@@ -27,25 +27,6 @@ console .error ( '#error', '#teatro', '#code', error .code, '#message', error .m
 } );
 
  teatro .on ( 'open', Opening ( key ) );
-/*
-teatro .on ( 'close', () => {
-
-console .log ( '#teatro #close' );
-process .stdin .removeAllListeners ();
-process .stdin .end ();
-
-} );
-*/
-process .on ( 'SIGINT', () => {
-
-process .exitCode = 1;
-
-teatro .close ( key );
-
-console .error ( '#SIGINT' );
-
-} );
-
 process .on ( 'exit', ( code ) => {
 
 console .error ( '#exit', code );
@@ -53,8 +34,6 @@ console .error ( '#exit', code );
 } );
 
 process .stdout .on ( 'close', () => {
-
-console .error ( 'bye' );
 
 teatro .close ( key );
 

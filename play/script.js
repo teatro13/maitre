@@ -5,30 +5,46 @@ export default play;
 
 export const establishment = play .establishment = function establishment () {
 
-const { teatro, scenarist, participant } = this;
+const { teatro, key, scenarist, participant } = this;
 let { prompt } = scenarist .setting;
 
 participant .input .setEncoding ( 'utf8' );
 participant .output .setEncoding ( 'utf8' );
 
-const cli = createInterface ( {
+const tty = participant .input .isTTY;
+const terminal = ! tty ? participant .input : createInterface ( {
 
 input: participant .input,
 output: participant .output,
+error: participant .error,
 prompt: prompt
 
 } );
 
-participant .input .on ( 'error', ( error ) => {
+terminal .on ( 'SIGINT', () => {
 
-cli .removeAllListeners ();
-cli .close ();
-
-participant .output .write ( `\n#error ${ error .trim () }\n` );
+teatro .close ( key );
 
 } );
 
-cli .on ( 'line', ( line ) => {
+const onError = ( error ) => {
+
+terminal .removeAllListeners ();
+terminal .close ();
+
+if ( error )
+participant .error .write ( `\n#error ${ error .trim () }\n` );
+
+};
+
+if ( tty )
+participant .input .on ( 'error', onError );
+
+terminal .on ( 'error', onError );
+teatro .on ( 'error', onError );
+teatro .on ( 'close', onError );
+
+const onLine = ( line ) => {
 
 line = line .trim ();
 
@@ -44,41 +60,51 @@ const script = {
 
 event: line [ 0 ],
 action: line [ 1 ],
-details: {
-
-participant: participant,
-argument: line .splice ( 2 ) .join ( ' ' )
-
-}
+details: line .splice ( 2 ) .join ( ' ' )
 
 };
 
 scenarist .play ( script )
-.then ( ( message ) => {
+.then ( ( output ) => {
 
-cli .setPrompt ( scenarist .setting .prompt );
-cli .prompt ();
+if ( typeof output !== 'string' )
+return;
 
-if ( typeof message === 'string' )
-cli .write ( `${ message .trim () }\n` );
+terminal .write ( `${ output .trim () }\n` );
+
+participant .output .write ( setting .prompt );
 
 } )
 .catch ( ( error ) => {
 
+let message;
+
 if ( typeof error === 'string' )
-participant .output .write ( `\n${ error .trim () }\n` );
+message = error .trim ();
 
 else if ( error instanceof Error )
-participant .output .write ( `\n#error ${ error .message .trim () }\n` );
+message = error .message .trim ();
 
-cli .setPrompt ( scenarist .setting .prompt );
-cli .prompt ();
+participant .error .write ( `\n#error ${ message }\n` );
+
+participant .output .write ( scenarist . setting .prompt );
 
 } );
 
-} );
+};
 
-cli .prompt ();
-cli .write ( '#maitre #ready\n' );
+terminal .on ( tty ? 'line' : 'data', onLine );
+
+terminal .write ( '#maitre #ready\n' );
+participant .output .write ( scenarist .setting .prompt );
+
+};
+
+export const character = play .character = {};
+
+character .events = [ '?maitre\n...', '#maitre' ];
+character .action = function action ( script, cue, blooper ) {
+
+cue ();
 
 };

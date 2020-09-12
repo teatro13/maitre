@@ -31,7 +31,8 @@ key: key,
 participant: {
 
 input: process .stdin,
-output: process .stdout
+output: process .stdout,
+error: process .stderr
 
 },
 prompt: prompt,
@@ -74,7 +75,8 @@ teatro: teatro,
 participant: {
 
 input: participant,
-output: participant
+output: participant,
+error: participant
 
 },
 prompt: prompt,
