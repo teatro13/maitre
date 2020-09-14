@@ -2,7 +2,7 @@ export const character = {};
 character .events = [ '?maitre\n...', '#maitre', 'maitre' ];
 character .action = function action ( script ) {
 
-const { input, output } = this;
+const { play, input, output } = this;
 const send = ( event ) => {
 
 const contrato = document .getElementById ( 'contrato' );
@@ -11,6 +11,12 @@ input .ws .send ( `#contrato start ${ contrato .value }` );
 };
 
 switch ( script .action ) {
+
+case '#ready':
+
+input .ws .send ( `contrato start ${ play }` );
+
+break;
 
 case '#contrato':
 case 'contrato':

@@ -72,7 +72,7 @@ return;
 
 terminal .write ( `${ output .trim () }\n` );
 
-participant .output .write ( setting .prompt );
+participant .output .write ( scenarist .setting .prompt );
 
 } )
 .catch ( ( error ) => {

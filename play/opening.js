@@ -1,16 +1,5 @@
 import { Scenarist } from '@teatro13/scenarist';
-import { argv } from './argv.js';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-
-const __filename = fileURLToPath ( import .meta .url );
-const __dirname = dirname ( __filename );
-
-/*
-import script from './script.js';
-import venue from './venue.js';
-import contrato from './contrato.js';
-*/
+import { cast } from './cast.js';
 
 const prompt = '\n?maitre\n... ';
 
@@ -41,23 +30,13 @@ production: production,
 venue: {}
 
 },
-paths: [
+paths: cast ( [
 
 'script.js',
 'venue.js',
 'contrato.js'
 
-] .map ( ( path ) => {
-
-return `${ __dirname }/${ path }`;
-
-} )
-.concat ( argv .paths ?
-argv .paths .map ( ( path ) => {
-
-return `${ process .cwd () }/${ path }`;
-
-} ) : [] ),
+] ),
 establish: true
 
 } );
@@ -85,12 +64,12 @@ production: production,
 venue: {}
 
 },
-cast: [
+paths: cast ( [
 
-script,
-contrato
+'./script.js',
+'./contrato.js'
 
-],
+] ),
 establish: true
 
 } );

@@ -6,18 +6,17 @@ character .events = [ 'venue' ];
 character .action = function action ( script, cue, blooper ) {
 
 const { scenarist, teatro, key, venue, production, signature } = this;
-const { participant, argument } = script .details;
 
 switch ( script .action ) {
 
 case 'produce':
 
-if ( ! argument || venue [ argument ] )
+if ( ! script .details || venue [ script .details ] )
 return blooper ( 
 new ReferenceError ( 'Missing Play argument' )
 );
 
-import ( process .cwd () + '/' + argument )
+import ( process .cwd () + '/' + script .details )
 .then ( ( { Play } ) => {
 
 if ( typeof Play !== 'function' )
@@ -25,7 +24,7 @@ return blooper (
 new TypeError ( "Play is not of type 'function'" )
 );
 
-production [ argument ] = Play;
+production [ script .details ] = Play;
 
 cue ( '#maitre #venue' );
 

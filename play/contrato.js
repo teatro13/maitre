@@ -5,8 +5,7 @@ export const character = play .character = {};
 character .events = [ 'contrato', '#contrato' ];
 character .action = function action ( script, cue, blooper ) {
 
-const { scenarist, teatro, key, production, venue, signature } = this;
-const { participant, argument } = script .details;
+const { participant, scenarist, teatro, key, production, venue, signature } = this;
 let stamp;
 
 switch ( script .action ) {
@@ -14,12 +13,12 @@ switch ( script .action ) {
 case 'start':
 case 'new':
 
-if ( ! argument || ! production [ argument ] )
+if ( ! script .details || ! production [ script .details ] )
 return blooper (
 new ReferenceError ( 'Play does not exist' )
 );
 
-const playKey = teatro .host ( production [ argument ] ( {} ), signature );
+const playKey = teatro .host ( production [ script .details ] ( {} ), signature );
 
 if ( ! playKey )
 return blooper (
@@ -36,7 +35,7 @@ break;
 
 case 'play':
 
-const ticket = teatro .retrieve ( argument );
+const ticket = teatro .retrieve ( script .details );
 
 if ( ! ticket )
 return blooper ( '#maitre #ticket undefined' );
@@ -51,23 +50,23 @@ break;
 
 case 'end':
 
-if ( teatro .end ( venue [ argument ], signature ) )
-cue ( `#maitre #end ${ argument } ${ delete venue [ argument ] }` );
+if ( teatro .end ( venue [ script .details ], signature ) )
+cue ( `#maitre #end ${ script .details } ${ delete venue [ script .details ] }` );
 
-return blooper ( `#maitre #end ${ argument } false` );
+return blooper ( `#maitre #end ${ script .details } false` );
 
 case 'issue':
 
-stamp = teatro .issue ( venue [ argument ] );
+stamp = teatro .issue ( venue [ script .details ] );
 
 cue ( `#maitre #stamp ${ stamp }` );
 
 case 'cancel':
 
-if ( teatro .cancel ( argument, signature ) )
-cue ( `#maitre #cancel ${ argument } true` );
+if ( teatro .cancel ( script .details, signature ) )
+cue ( `#maitre #cancel ${ script .details } true` );
 
-return blooper ( `#maitre #cancel ${ argument } false` );
+return blooper ( `#maitre #cancel ${ script .details } false` );
 
 default:
 
