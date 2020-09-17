@@ -5,14 +5,15 @@ export default play;
 
 export const establishment = play .establishment = function establishment () {
 
-const { teatro, key, scenarist, participant } = this;
+const setting = this;
+const { teatro, key, scenarist, participant } = setting;
 let { prompt } = scenarist .setting;
 
 participant .input .setEncoding ( 'utf8' );
 participant .output .setEncoding ( 'utf8' );
 
 const tty = participant .input .isTTY;
-const terminal = ! tty ? participant .input : createInterface ( {
+const terminal = setting .terminal = ! tty ? participant .input : createInterface ( {
 
 input: participant .input,
 output: participant .output,
@@ -30,7 +31,8 @@ teatro .close ( key );
 const onError = ( error ) => {
 
 terminal .removeAllListeners ();
-terminal .close ();
+
+terminal [ tty ? 'close' : 'end' ] ();
 
 if ( error )
 participant .error .write ( `\n#error ${ error .trim () }\n` );
@@ -94,9 +96,6 @@ participant .output .write ( scenarist . setting .prompt );
 };
 
 terminal .on ( tty ? 'line' : 'data', onLine );
-
-terminal .write ( '#maitre #ready\n' );
-participant .output .write ( scenarist .setting .prompt );
 
 };
 

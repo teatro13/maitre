@@ -39,10 +39,29 @@ paths: cast ( [
 ] ),
 establish: true
 
-} );
+} )
+.then ( () => {
+
 ownerScenarist .display = 'maitre';
 
+const { terminal, participant } = ownerScenarist .setting;
+
+terminal .write ( '#maitre #ready\n' );
+participant .output .write ( prompt );
+
+} );
+
 teatro .on ( 'participant', ( participant ) => {
+
+[ 'close', 'error', 'end' ] .forEach ( ( event ) => {
+
+participant .on ( event, ( error ) => {
+
+console .error ( event, error );
+
+} );
+
+} );
 
 const participantScenarist = new Scenarist ();
 participantScenarist .scenario ( {
@@ -51,13 +70,7 @@ name: 'maitre',
 setting: {
 
 teatro: teatro,
-participant: {
-
-input: participant,
-output: participant,
-error: participant
-
-},
+participant: participant,
 prompt: prompt,
 signature: Symbol (),
 production: production,
@@ -66,14 +79,21 @@ venue: {}
 },
 paths: cast ( [
 
-'./script.js',
+'./ws.js',
 './contrato.js'
 
 ] ),
 establish: true
 
-} );
+} )
+.then ( () => {
+
 participantScenarist .display = 'maitre';
+
+participant .send ( '#maitre #ready\n' );
+participant .send ( prompt );
+
+} );
 
 } );
 
